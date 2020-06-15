@@ -1,5 +1,5 @@
 
-### Stocks_LSTM is a Python package for implementing TensorFlow machine learning models with live stock price and volume data.
+**Long-Short Term Memory(LSTM)** is a powerful machine learning architecture for use with time series data.  Employing it for stock market predictions requires converting raw price and volume data into tensors fit for machine learning.  **Stocks_LSTM** is a Python package for implementing TensorFlow machine learning models with live stock data.
 
  * Downloads and stores stock price and volume data
  * Converts raw data to tensors viable for machine learning with user defined functions
@@ -66,9 +66,9 @@ train_inputs, train_labels, val_inputs, val_labels = ga.dataset.split_data(scale
 
 ### LSTM
 
-LSTM is a form of Recurrent Neural Network and allows us to input a time series of each input.  Each training sample should be a non-overlapping time series and LSTM expects the data to be of shape `(samples, time_steps, inputs)`.  In this example, each sample is taken as three time steps (days of input).  
+LSTM is a form of Recurrent Neural Network and allows us to input a time series of each input.  Each training sample should be a non-overlapping time series and LSTM expects the resulting data cube to be of shape `(samples, time_steps, inputs)`.  In this example, each sample is taken as three time steps (days of input).  
 
-Validation data will not effect the model, so the data can be stacked in overlapping samples.
+Validation data will not effect the model, so the data can be stacked in overlapping (dense) samples.
 
 ```python
 stacked_train_inputs, stacked_train_labels, stacked_train_dts = ga.dataset.stack_inputs(train_inputs, train_labels, STACK_DAYS=3)
