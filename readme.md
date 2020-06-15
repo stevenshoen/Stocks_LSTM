@@ -1,13 +1,17 @@
 
 ### Stocks_LSTM is a Python package for implementing TensorFlow machine learning models with live stock price and volume data.
 
-        * Downloads and stores stock price and volume data
-        * Converts raw data to tensors viable for machine learning with user defined functions
-        * Uses TensorFlow models with any applicable layers
-        * Stacks tensors for use with LSTM layers
-        * Train, Verify, Evaluate, Repeat!
+ * Downloads and stores stock price and volume data
+ * Converts raw data to tensors viable for machine learning with user defined functions
+ * Uses TensorFlow models with any applicable layers
+ * Stacks tensors for use with LSTM layers
+ * Train, Verify, Evaluate, Repeat!
+
+****
 
 ## Usage
+
+****
 
 ### Pickel / IEX Backend
 
@@ -22,6 +26,8 @@ data = dm.load_data()
 data = dm.update(data)
 dm.save_data(data)
 ```
+
+****
 
 ### Inputs and Labels
 
@@ -56,6 +62,8 @@ Split the dataset into a training and a validation set.  For this Example, the l
 train_inputs, train_labels, val_inputs, val_labels = ga.dataset.split_data(scaled_inputs, scaled_labels, ratio=0.8)
 ```
 
+****
+
 ### LSTM
 
 LSTM is a form of Recurrent Neural Network and allows us to input a time series of each input.  Each training sample should be a non-overlapping time series and LSTM expects the data to be of shape `(samples, time_steps, inputs)`.  In this example, each sample is taken as three time steps (days of input).  
@@ -76,6 +84,8 @@ print('input data shape:', stacked_train_inputs[ga.index].shape)
 print('label data shape:', stacked_train_labels[ga.index].shape)
 >>>label data shape: (45, 1)
 ```
+
+****
 
 ### The Tensorflow Model
 
@@ -114,6 +124,8 @@ ga.model.summary()
 
 Notice `build_model` takes the shape of each sample as a contructor argument.  In this case it will be shape `(time_steps, inputs)`.  This choice of architecture has given a model with >55k trainable parameters.
 
+****
+
 ### Training
 
 Train the model on the dataset.  Each asset or stock symbol is trained seperately and the resulting weights and biases are stored.  
@@ -134,6 +146,8 @@ plot_errorloss(ga)
 
 Note that all TensorFlow callbacks are disabled in this example, so the model will train for a set number of epochs.  At the end of training it will save the set of weights that resulted in the smallest loss for each symbol.  As a result, it is almost guaranteed to either overfit or underfit the data.
 
+****
+
 ### Evaluate and Predict
 
 Evaluate the performance of the model over the validation data.  In this case predictions are also obtained from the validation data, though in practice it would be a seperate set of data.
@@ -142,6 +156,8 @@ Evaluate the performance of the model over the validation data.  In this case pr
 evaluation = ga.eval_from_dataset(stacked_val_inputs, stacked_val_labels)
 predictions = ga.predict_group(stacked_val_inputs)
 ```
+
+****
 
 ### Results
 
@@ -172,12 +188,16 @@ histogram(ga.dataset, highest_pred, labels, val_labels, stacked_val_dts, descale
 
   As a result, the actual vs. prediction plot looks encouraging, but the error histogram less so.  Comparing the training loss to validation loss shows that the model is quite likely underfit.  The loss and error plots indicate the same, as loss and error were still decreasing for most symbols when it reached the last epoch.  More work would need done with this model.
 
+****
+
 ### Future Work
 
 * Callbacks.  This model, as shown, is still in need of an effective callback system to select the best weights to use for prediction.
 * Tensorboard or a similar logging system will help to monitor weights and neural activity during training.
 * Classification.  It may be beneficial to use a classification model as opposed to this regression model.  If each day is labeled with a list of boolean values, of which only one is true (strong down, down, flat, etc..), rather than a scalar(percent change).  This implementation might make neural activity easier to trace when comparing architectures.
 
+****
+
 A NOTE ON LIVE TIMING:  In order to be useful for 'same-day' predictions, the dataset must be able to compute valid inputs for the current day.  In this example, all inputs that begin with `'am_'` require an hour of am data to compute.  Also, IEX Stock data is delayed by 15 minutes.  So it will not compute a same day prediction until at least 75 minutes after market open.
 
-
+****
