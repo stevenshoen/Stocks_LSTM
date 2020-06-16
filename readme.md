@@ -20,7 +20,8 @@ The `DataManager` object handles downloading and updating of price and volume da
 ```python
 symbols = ['SPY', 'AAPL', 'MSFT', 'TSLA']
 index = 'SPY'
-dm = DataManager('LIVEFORTUNE', symbols, trail_days=250)
+filename 'sample'
+dm = DataManager(filename, symbols, trail_days=250)
 
 data = dm.load_data()
 data = dm.update(data)
@@ -50,7 +51,7 @@ funcs = {
 ds = Dataset(data, index=index, symbols=symbols, funcs=funcs, label_func=close_label)
 ```
 
-Apply the input and label functions.  The results are normalized and the normalization parameters stored for later descaling.
+Apply the input and label functions.  The results are normalized and the normalization parameters stored for later descaling.  This process will also drop any trailing days for inputs or leading days for labels that return a nan value, e.g. percent change on the first day of the dataset.
 
 ```python
 inputs, labels, scaled_inputs, scaled_labels = ga.dataset.run()
